@@ -8,9 +8,12 @@ exports.drinkWine = (req, res) => {
             if (!exists[0]) {
                 conn.query("select * from vini where id_vino = ?", [req.body.vino]).then((result) => {
                     if (result[0].quantita - 1 === 0) {
+                        console.log(result[0].quantita);
                         conn.query("update vini set quantita = ? where id_vino = ?", [result[0].quantita - 1, result[0].id_vino]).then(() => {
                             conn.query("update vini set finito = 1 where id_vino = ?", [result[0].id_vino]).then(() => {
-                                console.log("FINITO")
+                                conn.query("insert into bevuti(nome, id_tipo, annata, quantita, id_dimensione, id_categoria, id_luogo, id_produttore, comment, id_vino) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [result[0].nome, result[0].id_tipo, result[0].annata, 1, result[0].id_dimensione, result[0].id_categoria, result[0].id_luogo, result[0].id_produttore, result[0].comment, result[0].id_vino]).then(() => {
+                                    console.log("FINITO")
+                                })
                             })
                         })
                     } else {
@@ -23,11 +26,24 @@ exports.drinkWine = (req, res) => {
                 })
             } else {
                 conn.query("select * from vini where id_vino = ?", [req.body.vino]).then((result) => {
-                    conn.query("update vini set quantita = ? where id_vino = ?", [result[0].quantita - 1, result[0].id_vino]).then(() => {
-                        conn.query("update bevuti set quantita = ? where id_bevuti = ?", [exists[0].quantita + 1, exists[0].id_bevuti]).then(() => {
-                            console.log("EXISTS")
+                    console.log(result[0].quantita);
+                    
+                    if (result[0].quantita - 1 === 0) {
+                        conn.query("update vini set finito = 1 where id_vino = ?", [result[0].id_vino]).then(() => {
+                            conn.query("update vini set quantita = ? where id_vino = ?", [result[0].quantita - 1, result[0].id_vino]).then(() => {
+                                conn.query("update bevuti set quantita = ? where id_bevuti = ?", [exists[0].quantita + 1, exists[0].id_bevuti]).then(() => {
+                                    console.log("EXISTS")
+                                    console.log("FINITO")
+                                })
+                            })
                         })
-                    })
+                    } else {
+                        conn.query("update vini set quantita = ? where id_vino = ?", [result[0].quantita - 1, result[0].id_vino]).then(() => {
+                            conn.query("update bevuti set quantita = ? where id_bevuti = ?", [exists[0].quantita + 1, exists[0].id_bevuti]).then(() => {
+                                console.log("EXISTS")
+                            })
+                        })
+                    }
                 })
             }
             res.sendStatus(200)
