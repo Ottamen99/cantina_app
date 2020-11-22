@@ -6,7 +6,7 @@ exports.getTotalInfos = "select sum(quantita) bottiglie, sum(quantita * d.size) 
 
 exports.getDrinkedInfo = "select sum(quantita) bottiglie, sum(quantita * d.size) litri from bevuti left join dimensioni d on bevuti.id_dimensione = d.id_dimensione"
 
-exports.getAllProducers = "select * from produttore"
+exports.getAllProducers = "select * from produttore ORDER BY nome_produttore ASC"
 
 exports.getAllCategories = "select * from categoria"
 
@@ -23,3 +23,5 @@ exports.insertNewWine = "insert into vini(nome, id_tipo, annata, quantita, id_di
 exports.updateFinishedWine = "update vini set finito = null, quantita = ? where id_vino = ?"
 
 exports.updateWine = "update vini set quantita = quantita + ? where id_vino = ?"
+
+exports.insertNewProducer = "insert into produttore(nome_produttore) values(?)"

@@ -8,7 +8,6 @@ exports.drinkWine = (req, res) => {
             if (!exists[0]) {
                 conn.query("select * from vini where id_vino = ?", [req.body.vino]).then((result) => {
                     if (result[0].quantita - 1 === 0) {
-                        console.log(result[0].quantita);
                         conn.query("update vini set quantita = ? where id_vino = ?", [result[0].quantita - 1, result[0].id_vino]).then(() => {
                             conn.query("update vini set finito = 1 where id_vino = ?", [result[0].id_vino]).then(() => {
                                 conn.query("insert into bevuti(nome, id_tipo, annata, quantita, id_dimensione, id_categoria, id_luogo, id_produttore, comment, id_vino) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [result[0].nome, result[0].id_tipo, result[0].annata, 1, result[0].id_dimensione, result[0].id_categoria, result[0].id_luogo, result[0].id_produttore, result[0].comment, result[0].id_vino]).then(() => {
@@ -26,8 +25,6 @@ exports.drinkWine = (req, res) => {
                 })
             } else {
                 conn.query("select * from vini where id_vino = ?", [req.body.vino]).then((result) => {
-                    console.log(result[0].quantita);
-                    
                     if (result[0].quantita - 1 === 0) {
                         conn.query("update vini set finito = 1 where id_vino = ?", [result[0].id_vino]).then(() => {
                             conn.query("update vini set quantita = ? where id_vino = ?", [result[0].quantita - 1, result[0].id_vino]).then(() => {
@@ -81,5 +78,24 @@ exports.inserNewWine = (req, res) => {
         })
     } else {
         res.sendStatus(409)
+    }
+}
+
+exports.insertProducer = (req, res) => {
+    if (req.body.nome) {
+        let connector = mariaDB.getConnection
+        connector.then((conn) => {
+            conn.query(queries.insertNewProducer, [req.body.nome]).then(() => {
+                conn.query("select last_insert_id() as 'lastId'", []).then((lastId) => {
+                    res.send(lastId)
+                }).catch((err) => {
+                    console.log(err)
+                    res.sendStatus(500)
+                })
+            }).catch((err) => {
+                console.log(err)
+                res.sendStatus(500)
+            })
+        })
     }
 }
