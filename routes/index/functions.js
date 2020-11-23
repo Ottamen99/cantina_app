@@ -99,3 +99,22 @@ exports.insertProducer = (req, res) => {
         })
     }
 }
+
+exports.insertGrapes = (req, res) => {
+    if (req.body.nome) {
+        let connector = mariaDB.getConnection
+        connector.then((conn) => {
+            conn.query(queries.insertNewGrapes, [req.body.nome]).then(() => {
+                conn.query("select last_insert_id() as 'lastId'", []).then((lastId) => {
+                    res.send(lastId)
+                }).catch((err) => {
+                    console.log(err)
+                    res.sendStatus(500)
+                })
+            }).catch((err) => {
+                console.log(err)
+                res.sendStatus(500)
+            })
+        })
+    }
+}

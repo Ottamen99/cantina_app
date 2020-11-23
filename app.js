@@ -29,6 +29,7 @@ app.use('/users', usersRouter);
 app.post('/drinkWine', indexFunctions.drinkWine);
 app.post('/insertWine', indexFunctions.inserNewWine);
 app.post('/insertProducer', indexFunctions.insertProducer);
+app.post('/insertGrape', indexFunctions.insertGrapes);
 app.get('/getWines', apiRouter.getWines);
 app.get('/getDrinkedWines', apiRouter.getDrinkedWines);
 app.get('/getProducers', apiRouter.getProducers);

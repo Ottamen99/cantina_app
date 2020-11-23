@@ -14,7 +14,7 @@ exports.getAllSizes = "select * from dimensioni"
 
 exports.getAllPositions = "select * from luogo"
 
-exports.getAllGrapes = "select * from tipo"
+exports.getAllGrapes = "select * from tipo ORDER BY tipo ASC"
 
 exports.checkIfExists = "select * from vini where nome = ? and id_tipo = ? and annata = ? and id_dimensione = ? and id_categoria = ? and id_luogo = ? and id_produttore = ?"
 
@@ -25,3 +25,5 @@ exports.updateFinishedWine = "update vini set finito = null, quantita = ? where 
 exports.updateWine = "update vini set quantita = quantita + ? where id_vino = ?"
 
 exports.insertNewProducer = "insert into produttore(nome_produttore) values(?)"
+
+exports.insertNewGrapes = "insert into tipo(tipo) values(?)"
