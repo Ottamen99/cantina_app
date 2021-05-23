@@ -19,6 +19,7 @@ function getIP() {
 
 async function getConnection() {
     getIP()
+    console.log(results[0])
     let connection
     try {
         connection = mariadb.createConnection({
