@@ -9,6 +9,7 @@ function getIP() {
     for (const name of Object.keys(nets)) {
         for (const net of nets[name]) {
             // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+            console.log(net.address)
             if (net.family === 'IPv4' && !net.internal) {
                 if (net.address.includes('10.0.0.'))
                     results.push(net.address);
